@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<Appenders>
+		<Console name="LogToConsole" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+		<RollingRandomAccessFile
+			name="LogToRollingRandomAccessFile"
+			fileName="logs/traza.${date:yyyy-MM-dd}.log"
+			filePattern="logs/$${date:yyyy-MM}/traza-%d{MM-dd-yyyy}-%i.gz">
+			<PatternLayout>
+				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="20 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="3" />
+		</RollingRandomAccessFile>
+
+	</Appenders>
+	<Loggers>
+		<!-- avoid duplicated logs with additivity=false -->
+		<Logger name="com.dual.trazas" level="info" additivity="false">
+			<AppenderRef ref="LogToRollingRandomAccessFile" />
+			<AppenderRef ref="LogToConsole" />
+		</Logger>
+		<Root level="info">
+			<AppenderRef ref="LogToConsole" />
+		</Root>
+	</Loggers>
+</Configuration>
